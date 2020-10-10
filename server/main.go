@@ -16,7 +16,7 @@ func main() {
 	config.Init()
 
 	// Database
-	InitDatabase(config.DBUrl)
+	InitDatabase(config.DBConnection)
 	MigrateDatabase()
 
 	// Middlewares
@@ -25,6 +25,8 @@ func main() {
 	e.Use(middleware.CORS())
 
 	if config.Env == Production {
+		e.Use(middleware.RequestID())
+		e.Use(middleware.Secure())
 		e.Use(middleware.Gzip())
 	}
 

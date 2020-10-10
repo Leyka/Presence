@@ -14,9 +14,9 @@ const (
 
 // Configuration structure
 type Config struct {
-	Port  string
-	DBUrl string
-	Env   uint
+	Port         string
+	DBConnection string
+	Env          uint
 }
 
 // Read .env file and injects it to server memory
@@ -34,9 +34,9 @@ func (c *Config) Init() {
 	}
 
 	// Database URL
-	db, exists := os.LookupEnv("DB_URL")
+	connection, exists := os.LookupEnv("DB_CONN")
 	if exists {
-		c.DBUrl = db
+		c.DBConnection = connection
 	} else {
 		panic("DB_URL key has not been defined in .env file")
 	}

@@ -8,8 +8,8 @@ import (
 
 var DBConn *gorm.DB
 
-func InitDatabase(dbUrl string) {
-	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
+func InitDatabase(connection string) {
+	db, err := gorm.Open(postgres.Open(connection), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
