@@ -2,12 +2,20 @@
 
 ## Configuration 
 
-Create `.env` file like this:
+Create `.env` file that looks like this:
 
 ```
-ENV=development 
+ENV=development
 PORT=5000
 DB_CONN=postgres://postgres:qwerty@localhost:5432/presence
+SECRET=S3cRettt
+```
+
+To generate a new safe secret key, use python in terminal:
+
+```
+>>> import secrets
+>>> secrets.token_urlsafe()
 ```
 
 In Postgres, run this script to enable uuid: 
@@ -16,6 +24,6 @@ In Postgres, run this script to enable uuid:
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 ```
 
+## Docker 
+
 Run `docker-compose up` to start Postgres database.
-
-

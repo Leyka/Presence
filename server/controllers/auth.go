@@ -1,34 +1,33 @@
 package controllers
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/leyka/Presence/server/config"
 	"github.com/leyka/Presence/server/models"
 	"gorm.io/gorm"
 )
 
 type Auth struct {
-	DB *gorm.DB
+	Config *config.Config
+	DB     *gorm.DB
 }
 
-type authResponse struct {
+type response struct {
 	Teacher models.Teacher `json:"teacher"`
 	Token   string         `json:"token"`
 }
 
-func NewAuthController(db *gorm.DB) *Auth {
-	return &Auth{DB: db}
-}
-
-type loginPayload struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+func NewAuthController(c *config.Config, db *gorm.DB) *Auth {
+	return &Auth{
+		Config: c,
+		DB:     db,
+	}
 }
 
 func (a *Auth) Login(c echo.Context) (err error) {
-	var payload loginPayload
+	var payload models.Teacher
 	if err = c.Bind(&payload); err != nil {
 		c.Logger().Error(err)
 		return c.JSON(http.StatusNotAcceptable, err)
@@ -39,20 +38,17 @@ func (a *Auth) Login(c echo.Context) (err error) {
 	err = a.DB.Where("username = ?", payload.Username).First(&teacher).Error
 	if err != nil {
 		c.Logger().Error(err)
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return c.NoContent(http.StatusNotFound)
-		} else {
-			return c.NoContent(http.StatusInternalServerError)
-		}
+		return c.NoContent(http.StatusNotFound)
 	}
 
 	// Check password
-	if !teacher.IsValidPassword(payload.Password) {
+	if !teacher.IsMatchingPassword(payload.Password) {
+		c.Logger().Error("Password doesn't match")
 		return c.NoContent(http.StatusNotFound)
 	}
 	// Okay!
-	r := &authResponse{
-		Teacher: teacher,
+	r := &response{
+		Teacher: *teacher.Sanitize(),
 		Token:   "", // todo
 	}
 
@@ -60,21 +56,20 @@ func (a *Auth) Login(c echo.Context) (err error) {
 }
 
 func (a *Auth) Register(c echo.Context) (err error) {
-	teacher := new(models.Teacher)
-	// Bind "form" tag to new Teacher model
+	var teacher models.Teacher
 	if err = c.Bind(&teacher); err != nil {
 		c.Logger().Error(err)
 		return c.NoContent(http.StatusNotAcceptable)
 	}
 
 	// Save in DB
-	if a.DB.Create(teacher).Error != nil {
+	if a.DB.Create(&teacher).Error != nil {
 		c.Logger().Error(err)
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
-	r := &authResponse{
-		Teacher: *teacher,
+	r := &response{
+		Teacher: *teacher.Sanitize(),
 		Token:   "", // todo
 	}
 
