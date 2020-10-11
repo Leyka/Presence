@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"github.com/leyka/Presence/server/models"
@@ -8,16 +8,15 @@ import (
 
 var DBConn *gorm.DB
 
-func InitDatabase(connection string) {
+func Init(connection string) {
 	db, err := gorm.Open(postgres.Open(connection), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
-
 	DBConn = db
 }
 
-func MigrateDatabase() {
+func Migrate() {
 	err := DBConn.AutoMigrate(&models.Teacher{}, &models.Classroom{}, &models.Student{})
 	if err != nil {
 		panic(err)

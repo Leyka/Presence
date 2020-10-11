@@ -2,7 +2,7 @@
 
 ## Configuration 
 
-Create .env file like this:
+Create `.env` file like this:
 
 ```
 ENV=development 
