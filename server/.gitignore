@@ -4,3 +4,4 @@ db/
 # files
 .env
 *.exe
+*debug*

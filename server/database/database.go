@@ -11,7 +11,7 @@ var DBConn *gorm.DB
 func Init(connection string) {
 	db, err := gorm.Open(postgres.Open(connection), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		panic("Connection to database failed")
 	}
 	DBConn = db
 }
