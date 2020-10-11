@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/leyka/Presence/server/config"
 	"github.com/leyka/Presence/server/models"
@@ -17,6 +19,11 @@ type Auth struct {
 type response struct {
 	Teacher models.Teacher `json:"teacher"`
 	Token   string         `json:"token"`
+}
+
+type JwtTeacherClaims struct {
+	*models.Teacher
+	jwt.StandardClaims
 }
 
 func NewAuthController(c *config.Config, db *gorm.DB) *Auth {
@@ -49,7 +56,7 @@ func (a *Auth) Login(c echo.Context) (err error) {
 	// Okay!
 	r := &response{
 		Teacher: *teacher.Sanitize(),
-		Token:   "", // todo
+		Token:   a.createJwtToken(&teacher),
 	}
 
 	return c.JSON(http.StatusOK, r)
@@ -70,8 +77,26 @@ func (a *Auth) Register(c echo.Context) (err error) {
 
 	r := &response{
 		Teacher: *teacher.Sanitize(),
-		Token:   "", // todo
+		Token:   a.createJwtToken(&teacher),
 	}
 
 	return c.JSON(http.StatusOK, r)
+}
+
+func (a *Auth) createJwtToken(t *models.Teacher) string {
+	claims := &JwtTeacherClaims{
+		t,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(), // Month
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	secretBytes := []byte(a.Config.Secret)
+	encodedToken, err := token.SignedString(secretBytes)
+	if err != nil {
+		panic(err)
+	}
+
+	return encodedToken
 }
