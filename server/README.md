@@ -18,12 +18,6 @@ To generate a new safe secret key, use python in terminal:
 >>> secrets.token_urlsafe()
 ```
 
-In Postgres, run this script to enable uuid: 
-
-```
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
-```
-
 ## Docker 
 
 Run `docker-compose up` to start Postgres database.

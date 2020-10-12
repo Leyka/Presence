@@ -2,7 +2,7 @@ package models
 
 type Student struct {
 	BaseModel
-	FirstName   string `json:"firstName" gorm:"index:idx_fullname_student"`
-	LastName    string `json:"lastName" gorm:"index:idx_fullname_student"`
-	ClassroomID uint   `json:"-"`
+	FirstName   string `json:"firstName" gorm:"uniqueIndex:idx_unique_student"`
+	LastName    string `json:"lastName" gorm:"uniqueIndex:idx_unique_student"`
+	ClassroomID string `json:"-" gorm:"uniqueIndex:idx_unique_student"`
 }

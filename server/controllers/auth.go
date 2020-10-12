@@ -2,11 +2,10 @@ package controllers
 
 import (
 	"net/http"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/leyka/Presence/server/config"
+	"github.com/leyka/Presence/server/helpers"
 	"github.com/leyka/Presence/server/models"
 	"gorm.io/gorm"
 )
@@ -19,11 +18,6 @@ type Auth struct {
 type response struct {
 	Teacher models.Teacher `json:"teacher"`
 	Token   string         `json:"token"`
-}
-
-type JwtTeacherClaims struct {
-	*models.Teacher
-	jwt.StandardClaims
 }
 
 func NewAuthController(c *config.Config, db *gorm.DB) *Auth {
@@ -56,7 +50,7 @@ func (a *Auth) Login(c echo.Context) (err error) {
 	// Okay!
 	r := &response{
 		Teacher: *teacher.Sanitize(),
-		Token:   a.createJwtToken(&teacher),
+		Token:   helpers.CreateJwt(&teacher, a.Config.Secret),
 	}
 
 	return c.JSON(http.StatusOK, r)
@@ -71,32 +65,13 @@ func (a *Auth) Register(c echo.Context) (err error) {
 
 	// Save in DB
 	if a.DB.Create(&teacher).Error != nil {
-		c.Logger().Error(err)
-		return c.NoContent(http.StatusInternalServerError)
+		panic(err)
 	}
 
 	r := &response{
 		Teacher: *teacher.Sanitize(),
-		Token:   a.createJwtToken(&teacher),
+		Token:   helpers.CreateJwt(&teacher, a.Config.Secret),
 	}
 
 	return c.JSON(http.StatusOK, r)
-}
-
-func (a *Auth) createJwtToken(t *models.Teacher) string {
-	claims := &JwtTeacherClaims{
-		t,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(), // Month
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	secretBytes := []byte(a.Config.Secret)
-	encodedToken, err := token.SignedString(secretBytes)
-	if err != nil {
-		panic(err)
-	}
-
-	return encodedToken
 }

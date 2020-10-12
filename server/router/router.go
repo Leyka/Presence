@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/leyka/Presence/server/config"
 	"github.com/leyka/Presence/server/controllers"
+	"github.com/leyka/Presence/server/helpers"
 	"gorm.io/gorm"
 )
 
@@ -25,28 +26,31 @@ func Init(echo *echo.Echo, config *config.Config, dbConn *gorm.DB) {
 	// Setup JWT
 	jwtConfig = &middleware.JWTConfig{
 		SigningKey:              []byte(cfg.Secret),
-		Claims:                  &controllers.JwtTeacherClaims{},
+		Claims:                  &helpers.JwtTeacherClaims{},
 		ErrorHandlerWithContext: sendForbidden,
 	}
 
 	// Register unprotected routes
 	registerAuthRoutes()
 	// Register protected routes
-	registerTeachersRoutes()
+	registerClassroomsRoutes()
 }
 
 func registerAuthRoutes() {
 	authController := controllers.NewAuthController(cfg, db)
+
 	e.POST("/login", authController.Login)
 	e.POST("/register", authController.Register)
 }
 
-func registerTeachersRoutes() {
-	g := e.Group("/teachers", middleware.JWTWithConfig(*jwtConfig))
-	g.POST("", func(c echo.Context) error {
-		// todo
-		return c.String(http.StatusOK, "OK")
-	})
+func registerClassroomsRoutes() {
+	g := e.Group("/classrooms", middleware.JWTWithConfig(*jwtConfig))
+	classroomsController := controllers.NewClassroomsController(cfg, db)
+
+	g.GET("", classroomsController.All)
+	g.POST("", classroomsController.Create)
+	g.PUT("", classroomsController.Update)
+	g.DELETE("/:id", classroomsController.DeleteOne)
 }
 
 // Send response with status 403
