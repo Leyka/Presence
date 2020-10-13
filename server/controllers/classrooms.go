@@ -71,7 +71,8 @@ func (cls *Classrooms) Update(c echo.Context) (err error) {
 	// Make sure to assign or re-assign the current teacher Id
 	classroomPayload.TeacherID = teacher.Id
 
-	if err = cls.DB.Save(&classroomPayload).Error; err != nil {
+	err = cls.DB.Omit("Students").Save(&classroomPayload).Error
+	if err != nil {
 		panic(err)
 	}
 
@@ -79,19 +80,10 @@ func (cls *Classrooms) Update(c echo.Context) (err error) {
 }
 
 func (cls *Classrooms) DeleteOne(c echo.Context) (err error) {
-	classroomId := c.Param("id")
-	var classroom models.Classroom
-	if err = cls.DB.First(&classroom, classroomId).Error; err != nil {
-		return c.NoContent(http.StatusNotFound)
-	}
+	classroom := c.Get("classroom")
 
-	// Check if classroomId belongs to current teacher
-	teacher := helpers.GetTeacherFromJwt(&c)
-	if teacher.Id != classroom.TeacherID {
-		return c.NoContent(http.StatusForbidden)
-	}
 	// Permanent delete
-	if err = cls.DB.Unscoped().Delete(&classroom).Error; err != nil {
+	if err = cls.DB.Unscoped().Delete(classroom).Error; err != nil {
 		panic(err)
 	}
 

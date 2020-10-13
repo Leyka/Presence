@@ -26,7 +26,6 @@ func main() {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "[${method}] uri=${uri}, status=${status}, ip=${remote_ip}, time=${time_rfc3339_nano}, error=${error}\n",
 	}))
-
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 	e.Use(middleware.RequestID())
