@@ -11,5 +11,5 @@ type Classroom struct {
 	TimeStart time.Time `json:"timeStart"`
 	TimeEnd   time.Time `json:"timeEnd"`
 	Students  []Student `json:"students" gorm:"constraint:OnDelete:CASCADE;"`
-	TeacherID uint      `json:"-"`
+	UserID uint      `json:"-"`
 }

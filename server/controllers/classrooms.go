@@ -23,9 +23,9 @@ func NewClassroomsController(c *config.Config, db *gorm.DB) *Classrooms {
 }
 
 func (cls *Classrooms) All(c echo.Context) (err error) {
-	teacher := helpers.GetTeacherFromJwt(&c)
+	user := helpers.GetUserFromJwt(&c)
 	var classrooms []models.Classroom
-	err = cls.DB.Where("teacher_id = ?", teacher.Id).Preload("Students").Find(&classrooms).Error
+	err = cls.DB.Where("user_id = ?", user.Id).Preload("Students").Find(&classrooms).Error
 	if err != nil {
 		panic(err)
 	}
@@ -40,9 +40,9 @@ func (cls *Classrooms) Create(c echo.Context) (err error) {
 		return c.NoContent(http.StatusNotAcceptable)
 	}
 
-	// Assign classroom to current teacher and save classroom (with students inside)
-	teacher := helpers.GetTeacherFromJwt(&c)
-	classroom.TeacherID = teacher.Id
+	// Assign classroom to current user and save classroom (with students inside)
+	user := helpers.GetUserFromJwt(&c)
+	classroom.UserID = user.Id
 	if err = cls.DB.Create(&classroom).Error; err != nil {
 		panic(err)
 	}
@@ -58,18 +58,18 @@ func (cls *Classrooms) Update(c echo.Context) (err error) {
 	}
 
 	var classroom models.Classroom
-	if err = cls.DB.Select("teacher_id").First(&classroom, classroomPayload.ID).Error; err != nil {
+	if err = cls.DB.Select("user_id").First(&classroom, classroomPayload.ID).Error; err != nil {
 		return c.NoContent(http.StatusNotFound)
 	}
 
-	// Check if classroom belongs to teacher
-	teacher := helpers.GetTeacherFromJwt(&c)
-	if teacher.Id != classroom.TeacherID {
+	// Check if classroom belongs to user
+	user := helpers.GetUserFromJwt(&c)
+	if user.Id != classroom.UserID {
 		return c.NoContent(http.StatusForbidden)
 	}
 
-	// Make sure to assign or re-assign the current teacher Id
-	classroomPayload.TeacherID = teacher.Id
+	// Make sure to assign or re-assign the current user Id
+	classroomPayload.UserID = user.Id
 
 	err = cls.DB.Omit("Students").Save(&classroomPayload).Error
 	if err != nil {

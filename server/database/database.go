@@ -17,7 +17,7 @@ func Init(connection string) {
 }
 
 func Migrate() {
-	err := DBConn.AutoMigrate(&models.Teacher{}, &models.Classroom{}, &models.Student{})
+	err := DBConn.AutoMigrate(&models.User{}, &models.Classroom{}, &models.Student{})
 	if err != nil {
 		panic(err)
 	}

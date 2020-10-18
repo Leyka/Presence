@@ -9,10 +9,10 @@ import (
 	"gorm.io/gorm"
 )
 
-// Checks that classroom belongs to current teacher. If so, pass the classroom data in echo Context, otherwise return HTTP errors.
+// Checks that classroom belongs to current user. If so, pass the classroom data in echo Context, otherwise return HTTP errors.
 // Err 400: if no :classroomId parameter passed to request
 // Err 404: if classroomId not found
-// Err 403: if classroom doesn't belong to current teacher
+// Err 403: if classroom doesn't belong to current user
 func CheckAndGetClassroom(db *gorm.DB) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
@@ -28,11 +28,11 @@ func CheckAndGetClassroom(db *gorm.DB) echo.MiddlewareFunc {
 				return c.NoContent(http.StatusNotFound)
 			}
 
-			// Get current teacher
-			teacher := helpers.GetTeacherFromJwt(&c)
+			// Get current user
+			user := helpers.GetUserFromJwt(&c)
 
-			// Check if classroom belongs to teacher
-			if teacher.Id != classroom.TeacherID {
+			// Check if classroom belongs to user
+			if user.Id != classroom.UserID {
 				return c.NoContent(http.StatusForbidden)
 			}
 

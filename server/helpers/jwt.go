@@ -8,15 +8,15 @@ import (
 	"github.com/leyka/Presence/server/models"
 )
 
-type JwtTeacherClaims struct {
+type JwtUserClaims struct {
 	Id uint
 	jwt.StandardClaims
 }
 
-// Create a new Json Web Token of teacher (user)
-func CreateJwt(t *models.Teacher, secret string) string {
-	claims := &JwtTeacherClaims{
-		t.ID,
+// Create a new Json Web Token of user (user)
+func CreateJwt(u *models.User, secret string) string {
+	claims := &JwtUserClaims{
+		u.ID,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(), // Month
 		},
@@ -31,9 +31,9 @@ func CreateJwt(t *models.Teacher, secret string) string {
 	return encodedToken
 }
 
-// Returns Teacher object from JWT provided in request
-func GetTeacherFromJwt(c *echo.Context) *JwtTeacherClaims {
+// Returns User object from JWT provided in request
+func GetUserFromJwt(c *echo.Context) *JwtUserClaims {
 	userToken := (*c).Get("user").(*jwt.Token)
-	claims := userToken.Claims.(*JwtTeacherClaims)
+	claims := userToken.Claims.(*JwtUserClaims)
 	return claims
 }

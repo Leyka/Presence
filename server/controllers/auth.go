@@ -16,7 +16,7 @@ type Auth struct {
 }
 
 type response struct {
-	Teacher models.Teacher `json:"teacher"`
+	User models.User `json:"user"`
 	Token   string         `json:"token"`
 }
 
@@ -28,49 +28,49 @@ func NewAuthController(c *config.Config, db *gorm.DB) *Auth {
 }
 
 func (a *Auth) Login(c echo.Context) (err error) {
-	var payload models.Teacher
+	var payload models.User
 	if err = c.Bind(&payload); err != nil {
 		c.Logger().Error(err)
 		return c.JSON(http.StatusNotAcceptable, err)
 	}
 
-	var teacher models.Teacher
+	var user models.User
 	// Check username
-	err = a.DB.Where("username = ?", payload.Username).First(&teacher).Error
+	err = a.DB.Where("username = ?", payload.Username).First(&user).Error
 	if err != nil {
 		c.Logger().Error(err)
 		return c.NoContent(http.StatusNotFound)
 	}
 
 	// Check password
-	if !teacher.IsMatchingPassword(payload.Password) {
+	if !user.IsMatchingPassword(payload.Password) {
 		c.Logger().Error("Password doesn't match")
 		return c.NoContent(http.StatusNotFound)
 	}
 	// Okay!
 	r := &response{
-		Teacher: *teacher.Sanitize(),
-		Token:   helpers.CreateJwt(&teacher, a.Config.Secret),
+		User: *user.Sanitize(),
+		Token:   helpers.CreateJwt(&user, a.Config.Secret),
 	}
 
 	return c.JSON(http.StatusOK, r)
 }
 
 func (a *Auth) Register(c echo.Context) (err error) {
-	var teacher models.Teacher
-	if err = c.Bind(&teacher); err != nil {
+	var user models.User
+	if err = c.Bind(&user); err != nil {
 		c.Logger().Error(err)
 		return c.NoContent(http.StatusNotAcceptable)
 	}
 
 	// Save in DB
-	if a.DB.Create(&teacher).Error != nil {
+	if a.DB.Create(&user).Error != nil {
 		panic(err)
 	}
 
 	r := &response{
-		Teacher: *teacher.Sanitize(),
-		Token:   helpers.CreateJwt(&teacher, a.Config.Secret),
+		User: *user.Sanitize(),
+		Token:   helpers.CreateJwt(&user, a.Config.Secret),
 	}
 
 	return c.JSON(http.StatusOK, r)

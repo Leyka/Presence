@@ -27,12 +27,13 @@ func Init(echo *echo.Echo, config *config.Config, dbConn *gorm.DB) {
 	// Setup JWT
 	jwtConfig = &middleware.JWTConfig{
 		SigningKey:              []byte(cfg.Secret),
-		Claims:                  &helpers.JwtTeacherClaims{},
+		Claims:                  &helpers.JwtUserClaims{},
 		ErrorHandlerWithContext: sendForbidden,
 	}
 
 	// Register unprotected routes
 	registerAuthRoutes()
+
 	// Register protected routes
 	registerClassroomsRoutes()
 	// registerStudentsRoutes()
