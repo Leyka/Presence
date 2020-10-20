@@ -28,6 +28,7 @@ func main() {
 	}))
 	e.Use(middleware.Recover())
 
+	// test
 	e.Use(middleware.RequestID())
 	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		CookieHTTPOnly: true,
