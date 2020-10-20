@@ -17,7 +17,6 @@ type Auth struct {
 
 type response struct {
 	User models.User `json:"user"`
-	Token   string         `json:"token"`
 }
 
 func NewAuthController(c *config.Config, db *gorm.DB) *Auth {
@@ -48,9 +47,10 @@ func (a *Auth) Login(c echo.Context) (err error) {
 		return c.NoContent(http.StatusNotFound)
 	}
 	// Okay!
+	token := helpers.CreateJwt(&user, a.Config.Secret)
+	helpers.CreateJwtCookie(&c, token)
 	r := &response{
 		User: *user.Sanitize(),
-		Token:   helpers.CreateJwt(&user, a.Config.Secret),
 	}
 
 	return c.JSON(http.StatusOK, r)
@@ -64,14 +64,30 @@ func (a *Auth) Register(c echo.Context) (err error) {
 	}
 
 	// Save in DB
-	if a.DB.Create(&user).Error != nil {
+	if err = a.DB.Create(&user).Error; err != nil {
 		panic(err)
 	}
 
+	token := helpers.CreateJwt(&user, a.Config.Secret)
+	helpers.CreateJwtCookie(&c, token)
 	r := &response{
 		User: *user.Sanitize(),
-		Token:   helpers.CreateJwt(&user, a.Config.Secret),
 	}
 
 	return c.JSON(http.StatusOK, r)
+}
+
+func (a *Auth) GetCSRF(c echo.Context) error {
+	csrf := c.Get("csrf")
+	return c.JSON(http.StatusOK, csrf)
+}
+
+func (a *Auth) GetConnectedUser(c echo.Context) error {
+	user, err := helpers.GetUserFromJwt(&c)
+	// TODO: Fix, debug what is C context
+	if err != nil {
+		c.Logger().Error(err)
+		return c.NoContent(http.StatusNotFound)
+	}
+	return c.JSON(http.StatusOK, user)
 }
