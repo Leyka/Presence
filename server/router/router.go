@@ -29,6 +29,8 @@ func Init(echo *echo.Echo, config *config.Config, dbConn *gorm.DB) {
 		SigningKey:              []byte(cfg.Secret),
 		Claims:                  &helpers.JwtUserClaims{},
 		ErrorHandlerWithContext: sendForbidden,
+		TokenLookup:             "cookie:jwt",
+		AuthScheme:              "",
 	}
 
 	// Register unprotected routes
@@ -41,8 +43,12 @@ func Init(echo *echo.Echo, config *config.Config, dbConn *gorm.DB) {
 
 func registerAuthRoutes() {
 	authController := controllers.NewAuthController(cfg, db)
-	e.POST("/login", authController.Login)
-	e.POST("/register", authController.Register)
+
+	auth := e.Group("/auth")
+	auth.POST("/login", authController.Login)
+	auth.POST("/register", authController.Register)
+	auth.GET("/csrf", authController.GetCSRF)
+	auth.GET("/user", authController.GetConnectedUser)
 }
 
 func registerClassroomsRoutes() {

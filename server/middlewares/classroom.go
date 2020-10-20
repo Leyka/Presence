@@ -29,10 +29,10 @@ func CheckAndGetClassroom(db *gorm.DB) echo.MiddlewareFunc {
 			}
 
 			// Get current user
-			user := helpers.GetUserFromJwt(&c)
+			user, err := helpers.GetUserFromJwt(&c)
 
 			// Check if classroom belongs to user
-			if user.Id != classroom.UserID {
+			if err != nil || user.Id != classroom.UserID {
 				return c.NoContent(http.StatusForbidden)
 			}
 

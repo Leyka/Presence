@@ -23,7 +23,7 @@ func NewClassroomsController(c *config.Config, db *gorm.DB) *Classrooms {
 }
 
 func (cls *Classrooms) All(c echo.Context) (err error) {
-	user := helpers.GetUserFromJwt(&c)
+	user, _ := helpers.GetUserFromJwt(&c)
 	var classrooms []models.Classroom
 	err = cls.DB.Where("user_id = ?", user.Id).Preload("Students").Find(&classrooms).Error
 	if err != nil {
@@ -41,7 +41,7 @@ func (cls *Classrooms) Create(c echo.Context) (err error) {
 	}
 
 	// Assign classroom to current user and save classroom (with students inside)
-	user := helpers.GetUserFromJwt(&c)
+	user, _ := helpers.GetUserFromJwt(&c)
 	classroom.UserID = user.Id
 	if err = cls.DB.Create(&classroom).Error; err != nil {
 		panic(err)
@@ -63,8 +63,8 @@ func (cls *Classrooms) Update(c echo.Context) (err error) {
 	}
 
 	// Check if classroom belongs to user
-	user := helpers.GetUserFromJwt(&c)
-	if user.Id != classroom.UserID {
+	user, err := helpers.GetUserFromJwt(&c)
+	if err != nil || user.Id != classroom.UserID {
 		return c.NoContent(http.StatusForbidden)
 	}
 

@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"errors"
+	"net/http"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -18,7 +20,7 @@ func CreateJwt(u *models.User, secret string) string {
 	claims := &JwtUserClaims{
 		u.ID,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(), // Month
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 15).Unix(),
 		},
 	}
 
@@ -32,8 +34,22 @@ func CreateJwt(u *models.User, secret string) string {
 }
 
 // Returns User object from JWT provided in request
-func GetUserFromJwt(c *echo.Context) *JwtUserClaims {
-	userToken := (*c).Get("user").(*jwt.Token)
-	claims := userToken.Claims.(*JwtUserClaims)
-	return claims
+func GetUserFromJwt(c *echo.Context) (*JwtUserClaims, error) {
+	user := (*c).Get("user")
+	if user == nil {
+		return nil, errors.New("No Json Web Token (JWT) found")
+	}
+
+	token := user.(*jwt.Token)
+	claims := token.Claims.(*JwtUserClaims)
+	return claims, nil
+}
+
+func CreateJwtCookie(c *echo.Context, token string) {
+	cookie := new(http.Cookie)
+	cookie.Name = "jwt"
+	cookie.Value = token
+	cookie.Expires = time.Now().Add(24 * time.Hour * 15)
+	cookie.HttpOnly = true
+	(*c).SetCookie(cookie)
 }
