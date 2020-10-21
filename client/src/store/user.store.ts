@@ -15,17 +15,22 @@ export class UserStore {
 
   constructor(rootStore) {
     this.rootStore = rootStore;
-    console.log('Init new user');
-    // Fill in connected user if any
-    UserService.getConnectedUser().then(this.fillUser);
+    this.initUser();
   }
 
-  fillUser = (user) => {
+  @action async initUser() {
+    try {
+      const user = await UserService.getConnectedUser();
+      this.fillInUser(user);
+    } catch (err) {}
+  }
+
+  @action fillInUser(user) {
     if (user) {
       this.isConnected = true;
       this.firstName = user.firstName;
       this.lastName = user.lastName;
       this.userName = user.userName;
     }
-  };
+  }
 }

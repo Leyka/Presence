@@ -83,11 +83,12 @@ func (a *Auth) GetCSRF(c echo.Context) error {
 }
 
 func (a *Auth) GetConnectedUser(c echo.Context) error {
-	user, err := helpers.GetUserFromJwt(&c)
-	// TODO: Fix, debug what is C context
-	if err != nil {
-		c.Logger().Error(err)
-		return c.NoContent(http.StatusNotFound)
-	}
+	user, _ := helpers.GetUserFromJwt(&c)
+	/*
+		if err != nil {
+			c.Logger().Error(err)
+			return c.NoContent(http.StatusNotFound)
+		}
+	*/
 	return c.JSON(http.StatusOK, user)
 }
