@@ -11,7 +11,7 @@ import (
 )
 
 type JwtUserClaims struct {
-	Id uint
+	Id uint `json:"id"`
 	jwt.StandardClaims
 }
 

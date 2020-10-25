@@ -47,7 +47,7 @@ func registerAuthRoutes() {
 	auth.POST("/login", authController.Login)
 	auth.POST("/register", authController.Register)
 	auth.GET("/csrf", authController.GetCSRF)
-	auth.GET("/user", authController.GetConnectedUser)
+	auth.GET("/user", authController.GetConnectedUser, middleware.JWTWithConfig(*jwtConfig))
 }
 
 func registerClassroomsRoutes() {

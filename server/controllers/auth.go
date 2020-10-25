@@ -83,12 +83,8 @@ func (a *Auth) GetCSRF(c echo.Context) error {
 }
 
 func (a *Auth) GetConnectedUser(c echo.Context) error {
-	user, _ := helpers.GetUserFromJwt(&c)
-	/*
-		if err != nil {
-			c.Logger().Error(err)
-			return c.NoContent(http.StatusNotFound)
-		}
-	*/
-	return c.JSON(http.StatusOK, user)
+	userClaims, _ := helpers.GetUserFromJwt(&c)
+	var user models.User
+	a.DB.First(&user, userClaims.Id)
+	return c.JSON(http.StatusOK, user.Sanitize())
 }
