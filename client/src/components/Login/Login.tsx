@@ -1,5 +1,6 @@
 import React from 'react';
+import { AuthLayout } from '@/components/shared/layouts/AuthLayout';
 
 export const Login = () => {
-  return <div>login</div>;
+  return <AuthLayout>login</AuthLayout>;
 };

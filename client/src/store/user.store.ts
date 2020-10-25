@@ -22,7 +22,9 @@ export class UserStore {
     try {
       const user = await UserService.getConnectedUser();
       this.fillInUser(user);
-    } catch (err) {}
+    } catch (err) {
+      this.isConnected = false;
+    }
   }
 
   @action fillInUser(user) {
