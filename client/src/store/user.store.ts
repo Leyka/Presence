@@ -1,38 +1,41 @@
 import { UserService } from '@/services/user.service';
-import { action, computed, observable } from 'mobx';
+import { User } from '@/types';
+import { makeAutoObservable } from 'mobx';
 import { RootStore } from './index';
 
 export class UserStore {
   readonly rootStore: RootStore;
 
-  @observable isConnected = false;
-  @observable userName: string = '';
-  @observable firstName: string = '';
-  @observable lastName: string = '';
-  @computed get fullName() {
+  isConnected = false;
+  username: string = '';
+  firstName: string = '';
+  lastName: string = '';
+  
+  get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
 
   constructor(rootStore) {
+    makeAutoObservable(this);
     this.rootStore = rootStore;
-    this.initUser();
+    this.setConnectedUser();
   }
 
-  @action async initUser() {
+  async setConnectedUser() {
     try {
       const user = await UserService.getConnectedUser();
-      this.fillInUser(user);
+      if (user) {
+        this.setUser(user);
+      }
     } catch (err) {
       this.isConnected = false;
     }
   }
 
-  @action fillInUser(user) {
-    if (user) {
-      this.isConnected = true;
-      this.firstName = user.firstName;
-      this.lastName = user.lastName;
-      this.userName = user.userName;
-    }
+  setUser(user: User) {
+    this.isConnected = true;
+    this.firstName = user.firstName;
+    this.lastName = user.lastName;
+    this.username = user.username;
   }
 }

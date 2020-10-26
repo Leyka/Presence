@@ -30,21 +30,19 @@ func (a *Auth) Login(c echo.Context) (err error) {
 	var payload models.User
 	if err = c.Bind(&payload); err != nil {
 		c.Logger().Error(err)
-		return c.JSON(http.StatusNotAcceptable, err)
+		return c.String(http.StatusNotAcceptable, "Nom d'utilisateur ou mot de passe invalide")
 	}
 
 	var user models.User
 	// Check username
 	err = a.DB.Where("username = ?", payload.Username).First(&user).Error
 	if err != nil {
-		c.Logger().Error(err)
-		return c.NoContent(http.StatusNotFound)
+		return c.String(http.StatusNotFound, "Nom d'utilisateur ou mot de passe incorrect")
 	}
 
 	// Check password
 	if !user.IsMatchingPassword(payload.Password) {
-		c.Logger().Error("Password doesn't match")
-		return c.NoContent(http.StatusNotFound)
+		return c.String(http.StatusNotFound, "Nom d'utilisateur ou mot de passe incorrect")
 	}
 	// Okay!
 	token := helpers.CreateJwt(&user, a.Config.Secret)
@@ -60,7 +58,7 @@ func (a *Auth) Register(c echo.Context) (err error) {
 	var user models.User
 	if err = c.Bind(&user); err != nil {
 		c.Logger().Error(err)
-		return c.NoContent(http.StatusNotAcceptable)
+		return c.String(http.StatusNotAcceptable, "Formulaire d'inscription invalide")
 	}
 
 	// Save in DB

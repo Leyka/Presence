@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
 import axios from 'axios';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { RootStoreContext, initialStore } from './store';
 import { Login } from './components/Login/Login';
 import { Register } from './components/Register/Register';
+import { initialStore, RootStoreContext } from './store';
 
 export const App = () => {
   useEffect(() => {
