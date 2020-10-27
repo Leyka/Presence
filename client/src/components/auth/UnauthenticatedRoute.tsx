@@ -3,7 +3,7 @@ import { Observer } from 'mobx-react-lite';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
-export const ProtectedRoute = ({ component: RouteComponent, ...rest }) => {
+export const UnauthenticatedRoute = ({ component: RouteComponent, ...rest }) => {
   const { isConnected } = useRootStore().userStore;
   return (
     <Observer>
@@ -11,7 +11,7 @@ export const ProtectedRoute = ({ component: RouteComponent, ...rest }) => {
         <Route
           {...rest}
           render={(routeProps) =>
-            isConnected ? <RouteComponent {...routeProps} /> : <Redirect to="/" />
+            !isConnected ? <RouteComponent {...routeProps} /> : <Redirect to="/classrooms" />
           }
         />
       )}

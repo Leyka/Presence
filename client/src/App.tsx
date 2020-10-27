@@ -1,10 +1,13 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { UnauthenticatedRoute } from './components/auth/UnauthenticatedRoute';
+import { Classrooms } from './components/Classrooms/Classrooms';
 import { Login } from './components/Login/Login';
 import { Register } from './components/Register/Register';
+import { Welcome } from './components/Welcome/Welcome';
 import { initialStore, RootStoreContext } from './store';
-
 export const App = () => {
   useEffect(() => {
     const getCsrfToken = async () => {
@@ -18,10 +21,10 @@ export const App = () => {
     <RootStoreContext.Provider value={initialStore}>
       <Router>
         <Switch>
-          <Route exact path="/" />
+          <Route exact path="/" component={Welcome} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/classrooms" />
+          <UnauthenticatedRoute exact path="/register" component={Register} />
+          <ProtectedRoute exact path="/classrooms" component={Classrooms} />
         </Switch>
       </Router>
     </RootStoreContext.Provider>
