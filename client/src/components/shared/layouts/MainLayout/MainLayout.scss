@@ -1,0 +1,18 @@
+.MainLayout {
+  .MainLayout__container {
+    display: grid;
+    grid-template-rows: 40px 1fr;
+    height: 100vh;
+
+    main {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+    }
+  }
+
+  footer {
+    height: 80px;
+    background: #4d5186;
+    color: #fff;
+  }
+}
