@@ -1,6 +1,7 @@
 import { useRootStore } from '@/store';
 import { Observer } from 'mobx-react-lite';
 import React, { FC, ReactElement } from 'react';
+import { Footer } from '../../Footer/Footer';
 import './MainLayout.scss';
 import { NavigationBar } from './NavigationBar';
 
@@ -32,7 +33,7 @@ export const MainLayout: FC<Props> = (props) => {
               </section>
             </main>
           </div>
-          <footer>Footer</footer>
+          <Footer />
         </div>
       )}
     </Observer>

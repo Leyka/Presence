@@ -21,7 +21,7 @@ export const NavigationBar: FC<NavigationProps> = (props) => {
       <Navbar.Group align={Alignment.LEFT}>
         <Button className="bp3-minimal" icon="home" text="Accueil" />
         <NavbarDivider />
-        <Button className="bp3-minimal" icon="people" text="Mes groupes" disabled />
+        <Button className="bp3-minimal" icon="people" text="Mes cours" disabled />
       </Navbar.Group>
       <Navbar.Group align={Alignment.RIGHT}>
         <Popover content={<ProfilMenu onLogOutClick={onLogOutClick} />} minimal>
