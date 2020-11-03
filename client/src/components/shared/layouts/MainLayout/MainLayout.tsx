@@ -1,17 +1,40 @@
-import React from 'react';
+import { useRootStore } from '@/store';
+import { Observer } from 'mobx-react-lite';
+import React, { FC, ReactElement } from 'react';
 import './MainLayout.scss';
+import { NavigationBar } from './NavigationBar';
 
-export const MainLayout = () => {
+interface Props {
+  LeftElement: ReactElement;
+  leftTitle: string;
+  RightElement: ReactElement;
+  rightTitle: string;
+}
+
+export const MainLayout: FC<Props> = (props) => {
+  const { LeftElement, RightElement, leftTitle, rightTitle } = props;
+  const { userStore } = useRootStore();
+
   return (
-    <div className="MainLayout">
-      <div className="MainLayout__container">
-        <nav>Navbar</nav>
-        <main>
-          <div>Left</div>
-          <div>Right</div>
-        </main>
-      </div>
-      <footer>Footer</footer>
-    </div>
+    <Observer>
+      {() => (
+        <div className="MainLayout">
+          <div className="MainLayout__container">
+            <NavigationBar userFullName={userStore.fullName} onLogOutClick={userStore.logOut} />
+            <main>
+              <section className="MainLayout__left">
+                <h3>{leftTitle}</h3>
+                {LeftElement}
+              </section>
+              <section className="MainLayout__right">
+                <h3>{rightTitle}</h3>
+                {RightElement}
+              </section>
+            </main>
+          </div>
+          <footer>Footer</footer>
+        </div>
+      )}
+    </Observer>
   );
 };

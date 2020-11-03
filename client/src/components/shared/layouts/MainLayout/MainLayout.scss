@@ -1,12 +1,23 @@
 .MainLayout {
   .MainLayout__container {
     display: grid;
-    grid-template-rows: 40px 1fr;
+    grid-template-rows: auto 1fr;
     height: 100vh;
 
     main {
       display: grid;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 250px 1fr;
+
+      .MainLayout__right,
+      .MainLayout__left {
+        padding: 0 10px;
+      }
+
+      .MainLayout__left {
+        padding: 0 10px;
+        border-right: 3px dashed #3c4c5940;
+        background: #f7f7f7;
+      }
     }
   }
 

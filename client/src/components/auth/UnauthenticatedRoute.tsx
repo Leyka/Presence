@@ -11,7 +11,7 @@ export const UnauthenticatedRoute = ({ component: RouteComponent, ...rest }) => 
         <Route
           {...rest}
           render={(routeProps) =>
-            !isConnected ? <RouteComponent {...routeProps} /> : <Redirect to="/classrooms" />
+            !isConnected ? <RouteComponent {...routeProps} /> : <Redirect to="/attendance" />
           }
         />
       )}

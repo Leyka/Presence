@@ -38,4 +38,8 @@ export class UserStore {
     this.lastName = user.lastName;
     this.username = user.username;
   }
+
+  logOut() {
+    console.log('TODO: Logout');
+  }
 }

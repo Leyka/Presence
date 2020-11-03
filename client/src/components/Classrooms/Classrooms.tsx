@@ -5,5 +5,16 @@ import { MainLayout } from '../shared/layouts/MainLayout/MainLayout';
 
 export const Classrooms = () => {
   const { fullName } = useRootStore().userStore;
-  return <Observer>{() => <MainLayout></MainLayout>}</Observer>;
+  return (
+    <Observer>
+      {() => (
+        <MainLayout
+          leftTitle="Left"
+          LeftElement={<div>Left Classrooms</div>}
+          rightTitle="Right"
+          RightElement={<div>Right Classrooms</div>}
+        ></MainLayout>
+      )}
+    </Observer>
+  );
 };
