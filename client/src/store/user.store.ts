@@ -5,6 +5,11 @@ import { RootStore } from './index';
 
 export class UserStore {
   readonly rootStore: RootStore;
+  constructor(rootStore) {
+    makeAutoObservable(this);
+    this.rootStore = rootStore;
+    this.setConnectedUser();
+  }
 
   isConnected = false;
   username: string = '';
@@ -15,13 +20,7 @@ export class UserStore {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  constructor(rootStore) {
-    makeAutoObservable(this);
-    this.rootStore = rootStore;
-    this.setConnectedUser();
-  }
-
-  async setConnectedUser() {
+  private async setConnectedUser() {
     try {
       const user = await UserService.getConnectedUser();
       if (user) {
@@ -39,7 +38,9 @@ export class UserStore {
     this.username = user.username;
   }
 
-  logOut() {
+  logOut = () => {
+    this.isConnected = false;
+    // TODO: Clear session in backend
     console.log('TODO: Logout');
   }
 }

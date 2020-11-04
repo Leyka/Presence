@@ -51,5 +51,6 @@ func CreateJwtCookie(c *echo.Context, token string) {
 		Value:    token,
 		Expires:  time.Now().Add(24 * time.Hour * 15),
 		HttpOnly: true,
+		Path:     "/api",
 	})
 }

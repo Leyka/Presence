@@ -1,6 +1,8 @@
 @import '~normalize.css';
 @import '~@blueprintjs/core/lib/css/blueprint.css';
 
+$dark-color: #2f3255;
+
 * {
   box-sizing: border-box;
 }
@@ -10,4 +12,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+// Blueprint override
+.bp3-dark {
+  background: $dark-color !important;
+
+  .bp3-menu {
+    background: $dark-color;
+  }
 }

@@ -7,9 +7,9 @@ import { NavigationBar } from './NavigationBar';
 
 interface Props {
   LeftElement: ReactElement;
-  leftTitle: string;
+  leftTitle?: string;
   RightElement: ReactElement;
-  rightTitle: string;
+  rightTitle?: string;
 }
 
 export const MainLayout: FC<Props> = (props) => {
@@ -24,11 +24,11 @@ export const MainLayout: FC<Props> = (props) => {
             <NavigationBar userFullName={userStore.fullName} onLogOutClick={userStore.logOut} />
             <main>
               <section className="MainLayout__left">
-                <h3>{leftTitle}</h3>
+                {leftTitle && <h3>{leftTitle}</h3>}
                 {LeftElement}
               </section>
               <section className="MainLayout__right">
-                <h3>{rightTitle}</h3>
+                {rightTitle && <h3>{rightTitle}</h3>}
                 {RightElement}
               </section>
             </main>

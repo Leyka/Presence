@@ -13,14 +13,14 @@ import (
 )
 
 var (
-	e         *echo.Echo
+	g         *echo.Group
 	cfg       *config.Config
 	db        *gorm.DB
 	jwtConfig *middleware.JWTConfig
 )
 
 func Init(echo *echo.Echo, config *config.Config, dbConn *gorm.DB) {
-	e = echo
+	g = echo.Group("/api")
 	cfg = config
 	db = dbConn
 
@@ -43,7 +43,7 @@ func Init(echo *echo.Echo, config *config.Config, dbConn *gorm.DB) {
 func registerAuthRoutes() {
 	authController := controllers.NewAuthController(cfg, db)
 
-	auth := e.Group("/auth")
+	auth := g.Group("/auth")
 	auth.POST("/login", authController.Login)
 	auth.POST("/register", authController.Register)
 	auth.GET("/csrf", authController.GetCSRF)
@@ -53,7 +53,7 @@ func registerAuthRoutes() {
 func registerClassroomsRoutes() {
 	classroomsController := controllers.NewClassroomsController(cfg, db)
 
-	classrooms := e.Group("/classrooms", middleware.JWTWithConfig(*jwtConfig))
+	classrooms := g.Group("/classrooms", middleware.JWTWithConfig(*jwtConfig))
 	classrooms.GET("", classroomsController.All)
 	classrooms.POST("", classroomsController.Create)
 	classrooms.PUT("", classroomsController.Update)
@@ -76,5 +76,5 @@ func registerStudentsRoutes() {
 
 // Send response with status 403
 func sendForbidden(err error, c echo.Context) error {
-	return c.NoContent(http.StatusForbidden)
+	return c.JSON(http.StatusForbidden, err)
 }

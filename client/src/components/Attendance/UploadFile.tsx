@@ -20,7 +20,7 @@ export const UploadFile: FC = () => {
         intent="success"
         icon="upload"
       >
-        <p>
+        <div>
           Pour vérifier les présences, déposer un fichier sous format <strong>csv</strong>{' '}
           ci-dessous.
           <p>
@@ -30,7 +30,7 @@ export const UploadFile: FC = () => {
             </a>{' '}
             est supporté. Voici un exemple du contenu Excel:
           </p>
-        </p>
+        </div>
         <HTMLTable>
           <thead>
             <tr>

@@ -8,6 +8,7 @@ import {
   Popover,
 } from '@blueprintjs/core';
 import React, { FC } from 'react';
+import { useHistory } from 'react-router-dom';
 
 interface NavigationProps {
   userFullName: string;
@@ -16,12 +17,22 @@ interface NavigationProps {
 
 export const NavigationBar: FC<NavigationProps> = (props) => {
   const { userFullName, onLogOutClick } = props;
+  const history = useHistory();
+
+  const onClassroomClick = () => {
+    history.push('/classrooms');
+  };
+
+  const onHomeClick = () => {
+    history.push('/attendance');
+  };
+
   return (
     <Navbar className="bp3-dark">
       <Navbar.Group align={Alignment.LEFT}>
-        <Button className="bp3-minimal" icon="home" text="Accueil" />
+        <Button className="bp3-minimal" icon="home" text="Accueil" onClick={onHomeClick} />
         <NavbarDivider />
-        <Button className="bp3-minimal" icon="people" text="Mes cours" disabled />
+        <Button className="bp3-minimal" icon="people" text="Mes cours" onClick={onClassroomClick} />
       </Navbar.Group>
       <Navbar.Group align={Alignment.RIGHT}>
         <Popover content={<ProfilMenu onLogOutClick={onLogOutClick} />} minimal>
@@ -43,7 +54,7 @@ interface ProfileMenuProps {
 
 const ProfilMenu: FC<ProfileMenuProps> = ({ onLogOutClick }) => (
   <Menu>
-    <MenuItem text="Réglages" icon="cog" disabled />
+    <MenuItem text="Réglages" icon="cog" />
     <MenuItem text="Se déconnecter" icon="log-out" onClick={onLogOutClick} />
   </Menu>
 );

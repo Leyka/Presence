@@ -26,7 +26,7 @@ export const Login = observer(() => {
 
   // Redirect if already connected
   if (userStore.isConnected) {
-    return <Redirect to="/classrooms" />;
+    return <Redirect to="/attendance" />;
   }
   // Else show the login page
   return (

@@ -13,6 +13,7 @@ export interface User {
 
 export interface Classroom {
   id: number;
+  name: string;
   group: number;
   timeStart: Date;
   timeEnd: Date;

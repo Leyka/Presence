@@ -46,7 +46,8 @@ export const DropZone: FC<Props> = (props) => {
     color: '#bdbdbd',
     outline: 'none',
     transition: 'border .24s ease-in-out',
-    height: '300px',
+    height: '150px',
+    marginTop: '15px',
   };
 
   const activeStyle = {
