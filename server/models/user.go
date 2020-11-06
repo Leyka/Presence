@@ -13,6 +13,7 @@ type User struct {
 	LastName   string      `json:"lastName" gorm:"index:idx_fullname_user"`
 	Classrooms []Classroom `json:"classrooms"`
 	IsAdmin    bool        `json:"isAdmin" gorm:"default:false;not null"`
+	SchoolID   string      `json:"-"`
 }
 
 func (u *User) BeforeSave(tx *gorm.DB) error {

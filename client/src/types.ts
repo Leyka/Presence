@@ -26,3 +26,11 @@ export interface Student {
   firstName: string;
   lastName: string;
 }
+
+export interface School {
+  name: string; 
+  studentFirstNamePosition?: number;
+  studentLastNamePosition?: number;
+  classNameGroupRegexPattern?: string;
+  teachers?: User[];
+}

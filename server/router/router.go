@@ -37,6 +37,7 @@ func Init(echo *echo.Echo, config *config.Config, dbConn *gorm.DB) {
 
 	// Register protected routes
 	registerClassroomsRoutes()
+	registerSchoolsRoutes()
 	// registerStudentsRoutes()
 }
 
@@ -48,6 +49,13 @@ func registerAuthRoutes() {
 	auth.POST("/register", authController.Register)
 	auth.GET("/csrf", authController.GetCSRF)
 	auth.GET("/user", authController.GetConnectedUser, middleware.JWTWithConfig(*jwtConfig))
+}
+
+func registerSchoolsRoutes() {
+	schoolsController := controllers.NewSchoolsController(cfg, db)
+
+	schools := g.Group("/schools", middleware.JWTWithConfig(*jwtConfig))
+	schools.GET("", schoolsController.All)
 }
 
 func registerClassroomsRoutes() {
