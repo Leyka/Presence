@@ -1,4 +1,4 @@
-import { DropZone } from '@/components/shared/DropZone/DropZone';
+import { ExcelDropZone } from '@/components/shared/DropZone/ExcelDropZone';
 import { Callout, HTMLTable } from '@blueprintjs/core';
 import React, { FC } from 'react';
 import styled from 'styled-components';
@@ -8,7 +8,7 @@ const StyledCallout = styled(Callout)`
 `;
 
 export const UploadFile: FC = () => {
-  const uploadFiles = (files: File[]) => {
+  const onFilesUpload = (files: File[]) => {
     if (files?.length === 0) return;
     console.log(files);
   };
@@ -48,12 +48,7 @@ export const UploadFile: FC = () => {
           </tbody>
         </HTMLTable>
       </StyledCallout>
-      <DropZone
-        acceptFormat=".csv, application/vnd.ms-excel, text/csv"
-        text="Glisser-déposer (drag and drop) ou cliquer ici pour téléverser un fichier Excel (.csv)"
-        uploadFiles={uploadFiles}
-        multiple={false}
-      />
+      <ExcelDropZone onFilesUpload={onFilesUpload} multiple={false} />
     </div>
   );
 };

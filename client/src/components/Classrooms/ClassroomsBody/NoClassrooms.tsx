@@ -1,4 +1,4 @@
-import { DropZone } from '@/components/shared/DropZone/DropZone';
+import { ExcelDropZone } from '@/components/shared/DropZone/ExcelDropZone';
 import { NonIdealState } from '@blueprintjs/core';
 import React, { FC } from 'react';
 import styled from 'styled-components';
@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const StyledNonIdealState = styled(NonIdealState)`
   & > div {
     max-width: none;
-    width: 90%;
+    width: 80%;
   }
 `;
 
@@ -20,11 +20,6 @@ export const NoClassrooms: FC<Props> = ({ onAddClassroomsClick }) => (
     title="Votre liste de cours est vide"
     description="Commencer par ajouter des cours"
   >
-    <DropZone
-      acceptFormat=".csv, application/vnd.ms-excel, text/csv"
-      text="Glisser-déposer (drag and drop) ou cliquer ici pour téléverser un fichier Excel (.csv)"
-      uploadFiles={() => {}}
-      multiple={false}
-    />
+    <ExcelDropZone multiple onFilesUpload={() => {}} />
   </StyledNonIdealState>
 );

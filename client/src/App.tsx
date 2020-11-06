@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Schools } from './components/Admin/Schools/Schools';
 import { Attendance } from './components/Attendance/Attendance';
+import { AdminRoute } from './components/auth/AdminRoute';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Classrooms } from './components/Classrooms/Classrooms';
 import { Login } from './components/Login/Login';
@@ -27,6 +29,7 @@ export const App = () => {
           <Route exact path="/register" component={Register} />
           <ProtectedRoute exact path="/attendance" component={Attendance} />
           <ProtectedRoute exact path="/classrooms" component={Classrooms} />
+          <AdminRoute exact path="/admin/schools" component={Schools} />
         </Switch>
       </Router>
     </RootStoreContext.Provider>

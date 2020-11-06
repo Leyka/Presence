@@ -8,12 +8,13 @@ import { NavigationBar } from './NavigationBar';
 interface Props {
   LeftElement: ReactElement;
   leftTitle?: string;
+  LeftTitleElement?: ReactElement;
   RightElement: ReactElement;
   rightTitle?: string;
 }
 
 export const MainLayout: FC<Props> = (props) => {
-  const { LeftElement, RightElement, leftTitle, rightTitle } = props;
+  const { LeftElement, RightElement, leftTitle, rightTitle, LeftTitleElement } = props;
   const { userStore } = useRootStore();
 
   return (
@@ -21,10 +22,17 @@ export const MainLayout: FC<Props> = (props) => {
       {() => (
         <div className="MainLayout">
           <div className="MainLayout__container">
-            <NavigationBar userFullName={userStore.fullName} onLogOutClick={userStore.logOut} />
+            <NavigationBar
+              userFullName={userStore.fullName}
+              isUserAdmin={userStore.isAdmin}
+              onLogOutClick={userStore.logOut}
+            />
             <main>
               <section className="MainLayout__left">
-                {leftTitle && <h3>{leftTitle}</h3>}
+                <div className="title">
+                  {leftTitle && <h3>{leftTitle}</h3>}
+                  {LeftTitleElement && LeftTitleElement}
+                </div>
                 {LeftElement}
               </section>
               <section className="MainLayout__right">

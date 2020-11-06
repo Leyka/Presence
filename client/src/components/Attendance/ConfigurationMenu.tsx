@@ -17,7 +17,7 @@ export const ConfigurationMenu: FC<Props> = () => {
         </FormGroup>
         <FormGroup>
           <Label>
-            Tolérance
+            <div>Tolérance</div>
             <HTMLSelect fill>
               <option value="5">5 minutes</option>
               <option value="10">10 minutes</option>

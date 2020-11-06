@@ -15,6 +15,7 @@ export class UserStore {
   username: string = '';
   firstName: string = '';
   lastName: string = '';
+  isAdmin: boolean = false;
   
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
@@ -36,6 +37,7 @@ export class UserStore {
     this.firstName = user.firstName;
     this.lastName = user.lastName;
     this.username = user.username;
+    this.isAdmin = user.isAdmin;
   }
 
   logOut = () => {

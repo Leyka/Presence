@@ -17,6 +17,12 @@
         padding: 0 10px;
         border-right: 2px solid #3c4c5940;
         background: #f7f7f7;
+
+        .title {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
       }
     }
   }

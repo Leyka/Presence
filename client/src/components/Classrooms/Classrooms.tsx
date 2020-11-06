@@ -1,5 +1,6 @@
 import { ClassroomService } from '@/services/classroom.service';
 import { useRootStore } from '@/store';
+import { Button, Tooltip } from '@blueprintjs/core';
 import { Observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { MainLayout } from '../shared/layouts/MainLayout/MainLayout';
@@ -26,6 +27,11 @@ export const Classrooms = () => {
         <MainLayout
           leftTitle="Mes cours"
           LeftElement={<ClassroomsMenu classrooms={classroomStore.classrooms} />}
+          LeftTitleElement={
+            <Tooltip content="Ajouter des cours" position="right" intent="success">
+              <Button icon="add" minimal intent="success" />
+            </Tooltip>
+          }
           rightTitle={pageTitle}
           RightElement={
             <ClassroomsBody

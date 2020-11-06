@@ -9,6 +9,7 @@ export interface User {
   firstName: string;
   lastName: string;
   classrooms: Classroom[];
+  isAdmin: boolean;
 }
 
 export interface Classroom {
