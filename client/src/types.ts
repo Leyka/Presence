@@ -28,6 +28,7 @@ export interface Student {
 }
 
 export interface School {
+  id: number;
   name: string; 
   studentFirstNamePosition?: number;
   studentLastNamePosition?: number;

@@ -39,5 +39,45 @@ func (s *Schools) All(c echo.Context) (err error) {
 	}
 
 	return c.JSON(http.StatusOK, schools)
+}
 
+func (s *Schools) New(c echo.Context) (err error) {
+	var school models.School
+	if err = c.Bind(&school); err != nil {
+		panic(err)
+	}
+
+	// Save in DB
+	if err = s.DB.Create(&school).Error; err != nil {
+		panic(err)
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
+func (s *Schools) Edit(c echo.Context) (err error) {
+	var school models.School
+	if err = c.Bind(&school); err != nil {
+		panic(err)
+	}
+
+	// Save in DB
+	if err = s.DB.Save(&school).Error; err != nil {
+		panic(err)
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
+func (s *Schools) Delete(c echo.Context) (err error) {
+	schoolId := c.Param("id") // /schools/:id
+	if schoolId == "" {
+		return c.String(http.StatusBadRequest, "Missing 'id' in URL param")
+	}
+
+	if err = s.DB.Delete(&models.School{}, schoolId).Error; err != nil {
+		panic(err)
+	}
+
+	return c.NoContent(http.StatusOK)
 }

@@ -1,46 +1,31 @@
 import { useRootStore } from '@/store';
 import { Observer } from 'mobx-react-lite';
-import React, { FC, ReactElement } from 'react';
+import React, { FC } from 'react';
+import styled from 'styled-components';
 import { Footer } from '../../Footer/Footer';
-import './MainLayout.scss';
-import { NavigationBar } from './NavigationBar';
+import { Navbar } from '../../Navbar/Navbar';
 
-interface Props {
-  LeftElement: ReactElement;
-  leftTitle?: string;
-  LeftTitleElement?: ReactElement;
-  RightElement: ReactElement;
-  rightTitle?: string;
-}
+const StyledContainer = styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+`;
 
-export const MainLayout: FC<Props> = (props) => {
-  const { LeftElement, RightElement, leftTitle, rightTitle, LeftTitleElement } = props;
+export const MainLayout: FC = ({ children }) => {
   const { userStore } = useRootStore();
 
   return (
     <Observer>
       {() => (
-        <div className="MainLayout">
-          <div className="MainLayout__container">
-            <NavigationBar
+        <div>
+          <StyledContainer>
+            <Navbar
               userFullName={userStore.fullName}
               isUserAdmin={userStore.isAdmin}
               onLogOutClick={userStore.logOut}
             />
-            <main>
-              <section className="MainLayout__left">
-                <div className="title">
-                  {leftTitle && <h3>{leftTitle}</h3>}
-                  {LeftTitleElement && LeftTitleElement}
-                </div>
-                {LeftElement}
-              </section>
-              <section className="MainLayout__right">
-                {rightTitle && <h3>{rightTitle}</h3>}
-                {RightElement}
-              </section>
-            </main>
-          </div>
+            <main>{children}</main>
+          </StyledContainer>
           <Footer />
         </div>
       )}

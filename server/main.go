@@ -32,6 +32,7 @@ func main() {
 	e.Use(middleware.RequestID())
 	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		CookieHTTPOnly: true,
+		CookiePath:     "/api",
 	}))
 
 	if c.Env == config.Production {

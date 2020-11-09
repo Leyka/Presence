@@ -3,7 +3,7 @@ import { useRootStore } from '@/store';
 import { Button, Tooltip } from '@blueprintjs/core';
 import { Observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
-import { MainLayout } from '../shared/layouts/MainLayout/MainLayout';
+import { TwoColumnsLayout } from '../shared/layouts';
 import { ClassroomsBody } from './ClassroomsBody/ClassroomsBody';
 import { ClassroomsMenu } from './ClassroomsMenu/ClassroomsMenu';
 
@@ -24,7 +24,7 @@ export const Classrooms = () => {
   return (
     <Observer>
       {() => (
-        <MainLayout
+        <TwoColumnsLayout
           leftTitle="Mes cours"
           LeftElement={<ClassroomsMenu classrooms={classroomStore.classrooms} />}
           LeftTitleElement={
@@ -39,7 +39,7 @@ export const Classrooms = () => {
               setPageTitle={(title) => setPageTitle(title)}
             />
           }
-        ></MainLayout>
+        ></TwoColumnsLayout>
       )}
     </Observer>
   );

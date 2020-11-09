@@ -3,7 +3,7 @@ import {
   Button,
   Menu,
   MenuItem,
-  Navbar,
+  Navbar as BlueprintNavbar,
   NavbarDivider,
   Popover,
 } from '@blueprintjs/core';
@@ -16,7 +16,7 @@ interface NavigationProps {
   onLogOutClick();
 }
 
-export const NavigationBar: FC<NavigationProps> = (props) => {
+export const Navbar: FC<NavigationProps> = (props) => {
   const { userFullName, isUserAdmin, onLogOutClick } = props;
   const history = useHistory();
 
@@ -33,8 +33,8 @@ export const NavigationBar: FC<NavigationProps> = (props) => {
   };
 
   return (
-    <Navbar className="bp3-dark">
-      <Navbar.Group align={Alignment.LEFT}>
+    <BlueprintNavbar className="bp3-dark">
+      <BlueprintNavbar.Group align={Alignment.LEFT}>
         <Button className="bp3-minimal" icon="home" text="Accueil" onClick={onHomeClick} />
         <NavbarDivider />
         <Button className="bp3-minimal" icon="people" text="Mes cours" onClick={onClassroomClick} />
@@ -51,8 +51,8 @@ export const NavigationBar: FC<NavigationProps> = (props) => {
             </Popover>
           </>
         )}
-      </Navbar.Group>
-      <Navbar.Group align={Alignment.RIGHT}>
+      </BlueprintNavbar.Group>
+      <BlueprintNavbar.Group align={Alignment.RIGHT}>
         <Popover content={<ProfilMenu onLogOutClick={onLogOutClick} />} minimal>
           <Button
             className="bp3-minimal"
@@ -61,8 +61,8 @@ export const NavigationBar: FC<NavigationProps> = (props) => {
             text={userFullName}
           />
         </Popover>
-      </Navbar.Group>
-    </Navbar>
+      </BlueprintNavbar.Group>
+    </BlueprintNavbar>
   );
 };
 

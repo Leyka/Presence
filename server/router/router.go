@@ -56,6 +56,9 @@ func registerSchoolsRoutes() {
 
 	schools := g.Group("/schools", middleware.JWTWithConfig(*jwtConfig))
 	schools.GET("", schoolsController.All)
+	schools.POST("", schoolsController.New, middlewares.CheckIfUserAdmin(db))
+	schools.PUT("", schoolsController.Edit, middlewares.CheckIfUserAdmin(db))
+	schools.DELETE("/:id", schoolsController.Delete, middlewares.CheckIfUserAdmin(db))
 }
 
 func registerClassroomsRoutes() {

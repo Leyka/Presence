@@ -1,4 +1,4 @@
-import { AuthLayout } from '@/components/shared/layouts/AuthLayout/AuthLayout';
+import { AuthLayout } from '@/components/shared/layouts';
 import { UserService } from '@/services/user.service';
 import { useRootStore } from '@/store';
 import { Button, FormGroup, InputGroup } from '@blueprintjs/core';
