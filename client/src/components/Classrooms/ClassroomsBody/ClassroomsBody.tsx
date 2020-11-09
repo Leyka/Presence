@@ -28,5 +28,5 @@ export const ClassroomsBody: FC<Props> = (props) => {
     return <NoClassrooms onAddClassroomsClick={() => setAddClicked(true)} />;
   }
 
-  return <div>Default body</div>;
+  return <div>Body</div>;
 };

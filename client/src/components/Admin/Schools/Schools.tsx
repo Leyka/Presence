@@ -88,7 +88,7 @@ export const Schools = () => {
       <div>
         {schools.length === 0 && <Callout>Aucune école</Callout>}
         {schools.length > 0 && (
-          <StyledTable bordered striped>
+          <StyledTable bordered striped condensed>
             <thead>
               <tr>
                 <th>Nom</th>
@@ -102,12 +102,14 @@ export const Schools = () => {
             <tbody>
               {schools.map((school) => (
                 <tr key={school.id}>
-                  <td width="30%">{school.name}</td>
-                  <td width="10%">{school.studentFirstNamePosition}</td>
-                  <td width="10%">{school.studentLastNamePosition}</td>
-                  <td width="30%">{school.classNameGroupRegexPattern}</td>
-                  <td width="10%">{school.teachers?.length || 0}</td>
-                  <td width="10%">
+                  <td>{school.name}</td>
+                  <td>{school.studentFirstNamePosition}</td>
+                  <td>{school.studentLastNamePosition}</td>
+                  <td>
+                    <code>{school.classNameGroupRegexPattern}</code>
+                  </td>
+                  <td>{school.teachers?.length || 0}</td>
+                  <td>
                     <StyledButtons>
                       <Button
                         icon="edit"
