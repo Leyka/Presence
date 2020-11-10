@@ -20,6 +20,8 @@ export const Classrooms = () => {
     loadClassrooms();
   }, []);
 
+  const isEmptyClassroom = classrooms.length === 0;
+
   const onSelectClassroom = (classroom: Classroom) => {
     setSelectedClass(classroom);
     setPageTitle(`${classroom.name} / Groupe: ${classroom.group}`);
@@ -44,7 +46,7 @@ export const Classrooms = () => {
       }
       LeftTitleElement={
         <Tooltip content="Ajouter des cours" position="right" intent="success">
-          <Button icon="add" minimal intent="success" />
+          <Button icon="add" minimal intent="success" hidden={isEmptyClassroom} />
         </Tooltip>
       }
       rightTitle={pageTitle}

@@ -25,7 +25,7 @@ func NewClassroomsController(c *config.Config, db *gorm.DB) *Classrooms {
 func (cls *Classrooms) All(c echo.Context) (err error) {
 	user, _ := helpers.GetUserFromJwt(&c)
 	var classrooms []models.Classroom
-	err = cls.DB.Where("user_id = ?", user.Id).Preload("Students").Find(&classrooms).Error
+	err = cls.DB.Where("user_id = ?", user.Id).Preload("Schedules").Preload("Students").Find(&classrooms).Error
 	if err != nil {
 		panic(err)
 	}
